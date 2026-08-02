@@ -1,0 +1,14 @@
+# Ignore backend
+backend-coding/
+
+# Node modules
+**/node_modules/
+
+# Environment files
+**/.env
+
+# Logs
+*.log
+
+# Build
+dist/
