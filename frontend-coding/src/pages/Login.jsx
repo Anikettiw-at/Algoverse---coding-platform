@@ -3,13 +3,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, NavLink } from 'react-router';
-import { loginUser } from "../authSlice";
 import { useEffect, useState } from 'react';
-
+import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { loginUser } from '../authSlice';
+import AuthLayout, { FormField } from '../components/AuthLayout';
 
 const loginSchema = z.object({
-  emailId: z.string().email("Invalid Email"),
-  password: z.string().min(1, "Password is required")
+  emailId: z.string().email('Enter a valid email'),
+  password: z.string().min(1, 'Password is required'),
 });
 
 function Login() {
@@ -21,7 +22,7 @@ function Login() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(loginSchema) }); // Using renamed schema
+  } = useForm({ resolver: zodResolver(loginSchema) });
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -33,170 +34,60 @@ function Login() {
     dispatch(loginUser(data));
   };
 
-  // return (
-  //   <div className="min-h-screen flex items-center justify-center p-4 bg-base-200"> {/* Added bg for contrast */}
-  //     <div className="card w-96 bg-base-100 shadow-xl">
-  //       <div className="card-body">
-  //         <h2 className="card-title justify-center text-3xl mb-6">Leetcode</h2> {/* Added mb-6 */}
-
-
-  //         <form onSubmit={handleSubmit(onSubmit)}>
-  //           <div className="form-control"> {/* Removed mt-4 from first form-control for tighter spacing to title or global error */}
-  //             <label className="label"> {/* Removed mb-1, default spacing should be fine */}
-  //               <span className="label-text">Email</span>
-  //             </label>
-  //             <input
-  //               type="email"
-  //               placeholder="john@example.com"
-  //               className={`input input-bordered w-full ${errors.emailId ? 'input-error' : ''}`}
-  //               {...register('emailId')}
-  //             />
-  //             {errors.emailId && (
-  //               <span className="text-error text-sm mt-1">{errors.emailId.message}</span>
-  //             )}
-  //           </div>
-
-  //           <div className="form-control mt-4">
-  //             <label className="label">
-  //               <span className="label-text">Password</span>
-  //             </label>
-  //             <div className="relative">
-  //               <input
-  //                 type={showPassword ? "text" : "password"}
-  //                 placeholder="••••••••"
-  //                 className={`input input-bordered w-full pr-10 ${errors.password ? 'input-error' : ''}`}
-  //                 {...register('password')}
-  //               />
-  //               <button
-  //                 type="button"
-  //                 className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-  //                 onClick={() => setShowPassword(!showPassword)}
-  //                 aria-label={showPassword ? "Hide password" : "Show password"}
-  //               >
-  //                 {showPassword ? (
-  //                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-  //                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-  //                   </svg>
-  //                 ) : (
-  //                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-  //                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-  //                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-  //                   </svg>
-  //                 )}
-  //               </button>
-  //             </div>
-  //             {errors.password && (
-  //               <span className="text-error text-sm mt-1">{errors.password.message}</span>
-  //             )}
-  //           </div>
-
-  //           <div className="form-control mt-8 flex justify-center">
-  //             <button
-  //               type="submit"
-  //               className={`btn btn-primary ${loading ? 'loading btn-disabled' : ''}`} // Added btn-disabled for better UX with loading
-  //               disabled={loading}
-  //             >
-  //               {loading ? (
-  //                 <>
-  //                   <span className="loading loading-spinner"></span>
-  //                   Logging in...
-  //                 </>
-  //               ) : 'Login'}
-  //             </button>
-  //           </div>
-  //         </form>
-  //         <div className="text-center mt-6">
-  //           <span className="text-sm">
-  //             Don't have an account?{' '} {/* Adjusted text slightly */}
-  //             <NavLink to="/signup" className="link link-primary">
-  //               Sign Up
-  //             </NavLink>
-  //           </span>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
-
   return (
-  <div className="auth-bg">
+    <AuthLayout
+      title="Welcome back"
+      subtitle="Log in to continue your practice streak."
+      footer={
+        <>
+          New to AlgoVerse?{' '}
+          <NavLink to="/signup" className="font-semibold text-primary hover:underline">
+            Create an account
+          </NavLink>
+        </>
+      }
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+        <FormField label="Email" error={errors.emailId?.message}>
+          <span className={`input w-full ${errors.emailId ? 'input-error' : ''}`}>
+            <Mail size={16} className="opacity-50" />
+            <input type="email" placeholder="you@example.com" autoComplete="email" {...register('emailId')} />
+          </span>
+        </FormField>
 
-    {/* floating particles */}
-    {Array.from({ length: 18 }).map((_, i) => (
-      <span
-        key={i}
-        className="particle"
-        style={{
-          left: `${Math.random() * 100}%`,
-          animationDuration: `${12 + Math.random() * 20}s`,
-          animationDelay: `${Math.random() * 6}s`,
-        }}
-      />
-    ))}
+        <FormField label="Password" error={errors.password?.message}>
+          <span className={`input w-full ${errors.password ? 'input-error' : ''}`}>
+            <Lock size={16} className="opacity-50" />
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Your password"
+              autoComplete="current-password"
+              {...register('password')}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="opacity-60 hover:opacity-100"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </span>
+        </FormField>
 
-    <div className="auth-card">
-      <h2 className="auth-title">AlgoVerse</h2>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
-        {/* Email */}
-        <input
-          type="email"
-          placeholder="Email"
-          className={`input auth-input w-full ${
-            errors.emailId ? "input-error" : ""
-          }`}
-          {...register("emailId")}
-        />
-        {errors.emailId && (
-          <p className="text-error text-sm">{errors.emailId.message}</p>
+        {error && (
+          <div role="alert" className="alert alert-error alert-soft text-sm py-2.5">
+            {error}
+          </div>
         )}
 
-        {/* Password */}
-        <div className="relative">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            className={`input auth-input w-full pr-10 ${
-              errors.password ? "input-error" : ""
-            }`}
-            {...register("password")}
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-cyan-400"
-          >
-            {showPassword ? "🙈" : "👁️"}
-          </button>
-        </div>
-        {errors.password && (
-          <p className="text-error text-sm">{errors.password.message}</p>
-        )}
-
-        {/* Server error (e.g. Invalid Credentials) */}
-        {error && <p className="text-error text-sm text-center">{error}</p>}
-
-        {/* Button */}
-        <button
-          type="submit"
-          className={`btn auth-btn ${loading ? "loading" : ""}`}
-          disabled={loading}
-        >
-          {loading ? "Logging in..." : "LOGIN"}
+        <button type="submit" className="btn-gradient w-full" disabled={loading}>
+          {loading && <span className="loading loading-spinner loading-sm" />}
+          {loading ? 'Logging in...' : 'Log in'}
         </button>
       </form>
-
-      <p className="text-center text-sm mt-6">
-        Don&apos;t have an account?{" "}
-        <NavLink to="/signup" className="text-cyan-400 font-semibold">
-          Sign Up
-        </NavLink>
-      </p>
-    </div>
-  </div>
-);
-
+    </AuthLayout>
+  );
 }
 
 export default Login;

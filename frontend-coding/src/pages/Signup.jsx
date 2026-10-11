@@ -4,17 +4,23 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, NavLink } from 'react-router';
+import { Eye, EyeOff, Mail, Lock, User, Check } from 'lucide-react';
 import { registerUser } from '../authSlice';
+import AuthLayout, { FormField } from '../components/AuthLayout';
+
+// Backend ke validator.isStrongPassword ke rules se match karta hai
+const passwordRules = [
+  { test: (v) => v.length >= 8, label: '8+ characters' },
+  { test: (v) => /[a-z]/.test(v), label: 'Lowercase' },
+  { test: (v) => /[A-Z]/.test(v), label: 'Uppercase' },
+  { test: (v) => /[0-9]/.test(v), label: 'Number' },
+  { test: (v) => /[^A-Za-z0-9]/.test(v), label: 'Symbol' },
+];
 
 const signupSchema = z.object({
-  firstName: z.string().min(3, "Minimum character should be 3"),
-  emailId: z.string().email("Invalid Email"),
-  password: z.string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[a-z]/, "Password needs a lowercase letter")
-    .regex(/[A-Z]/, "Password needs an uppercase letter")
-    .regex(/[0-9]/, "Password needs a number")
-    .regex(/[^A-Za-z0-9]/, "Password needs a symbol")
+  firstName: z.string().min(3, 'Name must be at least 3 characters').max(20, 'Name must be at most 20 characters'),
+  emailId: z.string().email('Enter a valid email'),
+  password: z.string().refine((v) => passwordRules.every((rule) => rule.test(v)), 'Password does not meet all the rules'),
 });
 
 function Signup() {
@@ -26,8 +32,11 @@ function Signup() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(signupSchema) });
+  } = useForm({ resolver: zodResolver(signupSchema), defaultValues: { password: '' } });
+
+  const password = watch('password') ?? '';
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -39,194 +48,83 @@ function Signup() {
     dispatch(registerUser(data));
   };
 
-  // return (
-  //   <div className="min-h-screen flex items-center justify-center p-4 bg-base-200"> {/* Added a light bg for contrast */}
-  //     <div className="card w-96 bg-base-100 shadow-xl">
-  //       <div className="card-body">
-  //         <h2 className="card-title justify-center text-3xl mb-6">Leetcode</h2> {/* Added mb-6 for spacing */}
-  //         <form onSubmit={handleSubmit(onSubmit)}>
-  //           {/* First Name Field */}
-  //           <div className="form-control">
-  //             <label className="label">
-  //               <span className="label-text">First Name</span>
-  //             </label>
-  //             <input
-  //               type="text"
-  //               placeholder="John"
-  //               className={`input input-bordered w-full ${errors.firstName ? 'input-error' : ''}`}
-  //               {...register('firstName')}
-  //             />
-  //             {errors.firstName && (
-  //               <span className="text-error text-sm mt-1">{errors.firstName.message}</span>
-  //             )}
-  //           </div>
+  return (
+    <AuthLayout
+      title="Create your account"
+      subtitle="Start solving problems in under a minute."
+      footer={
+        <>
+          Already have an account?{' '}
+          <NavLink to="/login" className="font-semibold text-primary hover:underline">
+            Log in
+          </NavLink>
+        </>
+      }
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+        <FormField label="First name" error={errors.firstName?.message}>
+          <span className={`input w-full ${errors.firstName ? 'input-error' : ''}`}>
+            <User size={16} className="opacity-50" />
+            <input type="text" placeholder="Aniket" autoComplete="given-name" {...register('firstName')} />
+          </span>
+        </FormField>
 
-  //           {/* Email Field */}
-  //           <div className="form-control mt-4">
-  //             <label className="label">
-  //               <span className="label-text">Email</span>
-  //             </label>
-  //             <input
-  //               type="email"
-  //               placeholder="john@example.com"
-  //               className={`input input-bordered w-full ${errors.emailId ? 'input-error' : ''}`} // Ensure w-full for consistency
-  //               {...register('emailId')}
-  //             />
-  //             {errors.emailId && (
-  //               <span className="text-error text-sm mt-1">{errors.emailId.message}</span>
-  //             )}
-  //           </div>
+        <FormField label="Email" error={errors.emailId?.message}>
+          <span className={`input w-full ${errors.emailId ? 'input-error' : ''}`}>
+            <Mail size={16} className="opacity-50" />
+            <input type="email" placeholder="you@example.com" autoComplete="email" {...register('emailId')} />
+          </span>
+        </FormField>
 
-  //           {/* Password Field with Toggle */}
-  //           <div className="form-control mt-4">
-  //             <label className="label">
-  //               <span className="label-text">Password</span>
-  //             </label>
-  //             <div className="relative">
-  //               <input
-  //                 type={showPassword ? "text" : "password"}
-  //                 placeholder="••••••••"
-  //                 // Added pr-10 (padding-right) to make space for the button
-  //                 className={`input input-bordered w-full pr-10 ${errors.password ? 'input-error' : ''}`}
-  //                 {...register('password')}
-  //               />
-  //               <button
-  //                 type="button"
-  //                 className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700" // Added transform for better centering, styling
-  //                 onClick={() => setShowPassword(!showPassword)}
-  //                 aria-label={showPassword ? "Hide password" : "Show password"} // Accessibility
-  //               >
-  //                 {showPassword ? (
-  //                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-  //                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-  //                   </svg>
-  //                 ) : (
-  //                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-  //                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-  //                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-  //                   </svg>
-  //                 )}
-  //               </button>
-  //             </div>
-  //             {errors.password && (
-  //               <span className="text-error text-sm mt-1">{errors.password.message}</span>
-  //             )}
-  //           </div>
+        <FormField label="Password" error={errors.password?.message}>
+          <span className={`input w-full ${errors.password ? 'input-error' : ''}`}>
+            <Lock size={16} className="opacity-50" />
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Create a strong password"
+              autoComplete="new-password"
+              {...register('password')}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="opacity-60 hover:opacity-100"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </span>
+        </FormField>
 
-  //           {/* Submit Button */}
-  //           <div className="form-control mt-8 flex justify-center">
-  //             <button
-  //               type="submit"
-  //               className={`btn btn-primary ${loading ? 'loading' : ''}`}
-  //               disabled={loading}
-  //             >
-  //               {loading ? 'Signing Up...' : 'Sign Up'}
-  //             </button>
-  //           </div>
-  //         </form>
+        {/* Live password checklist */}
+        <ul className="flex flex-wrap gap-2" aria-label="Password requirements">
+          {passwordRules.map((rule) => {
+            const ok = rule.test(password);
+            return (
+              <li
+                key={rule.label}
+                className={`badge badge-sm gap-1 ${ok ? 'badge-success badge-soft' : 'badge-ghost text-base-content/50'}`}
+              >
+                {ok && <Check size={12} />}
+                {rule.label}
+              </li>
+            );
+          })}
+        </ul>
 
-  //         {/* Login Redirect */}
-  //         <div className="text-center mt-6"> {/* Increased mt for spacing */}
-  //           <span className="text-sm">
-  //             Already have an account?{' '}
-  //             <NavLink to="/login" className="link link-primary">
-  //               Login
-  //             </NavLink>
-  //           </span>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
-
- return (
-  <div className="auth-bg">
-
-    {/* floating particles */}
-    {Array.from({ length: 20 }).map((_, i) => (
-      <span
-        key={i}
-        className="particle"
-        style={{
-          left: `${Math.random() * 100}%`,
-          animationDuration: `${10 + Math.random() * 20}s`,
-          animationDelay: `${Math.random() * 5}s`,
-        }}
-      />
-    ))}
-
-    <div className="auth-card">
-      <h2 className="auth-title">AlgoVerse</h2>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
-        <input
-          type="text"
-          placeholder="First Name"
-          className={`input auth-input w-full ${
-            errors.firstName ? "input-error" : ""
-          }`}
-          {...register("firstName")}
-        />
-        {errors.firstName && (
-          <p className="text-error text-sm">{errors.firstName.message}</p>
+        {error && (
+          <div role="alert" className="alert alert-error alert-soft text-sm py-2.5">
+            {error}
+          </div>
         )}
 
-        <input
-          type="email"
-          placeholder="Email"
-          className={`input auth-input w-full ${
-            errors.emailId ? "input-error" : ""
-          }`}
-          {...register("emailId")}
-        />
-        {errors.emailId && (
-          <p className="text-error text-sm">{errors.emailId.message}</p>
-        )}
-
-        <div className="relative">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            className={`input auth-input w-full pr-10 ${
-              errors.password ? "input-error" : ""
-            }`}
-            {...register("password")}
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-cyan-400"
-          >
-            {showPassword ? "🙈" : "👁️"}
-          </button>
-        </div>
-        {errors.password && (
-          <p className="text-error text-sm">{errors.password.message}</p>
-        )}
-
-        {/* Server error (e.g. Email already registered) */}
-        {error && <p className="text-error text-sm text-center">{error}</p>}
-
-        <button
-          type="submit"
-          className={`btn auth-btn ${loading ? "loading" : ""}`}
-          disabled={loading}
-        >
-          {loading ? "Creating account..." : "SIGN UP"}
+        <button type="submit" className="btn-gradient w-full" disabled={loading}>
+          {loading && <span className="loading loading-spinner loading-sm" />}
+          {loading ? 'Creating account...' : 'Create account'}
         </button>
       </form>
-
-      <p className="text-center text-sm mt-6">
-        Already have an account?{" "}
-        <NavLink to="/login" className="text-cyan-400 font-semibold">
-          Login
-        </NavLink>
-      </p>
-    </div>
-  </div>
-);
-
+    </AuthLayout>
+  );
 }
 
 export default Signup;

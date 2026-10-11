@@ -164,7 +164,7 @@ function AdminPanel() {
               </label>
               <input
                 {...register('title')}
-                className={`input input-bordered ${errors.title && 'input-error'}`}
+                className={`input ${errors.title && 'input-error'}`}
               />
               {errors.title && (
                 <span className="text-error">{errors.title.message}</span>
@@ -177,7 +177,7 @@ function AdminPanel() {
               </label>
               <textarea
                 {...register('description')}
-                className={`textarea textarea-bordered h-32 ${errors.description && 'textarea-error'}`}
+                className={`textarea h-32 ${errors.description && 'textarea-error'}`}
               />
               {errors.description && (
                 <span className="text-error">{errors.description.message}</span>
@@ -191,7 +191,7 @@ function AdminPanel() {
                 </label>
                 <select
                   {...register('difficulty')}
-                  className={`select select-bordered ${errors.difficulty && 'select-error'}`}
+                  className={`select ${errors.difficulty && 'select-error'}`}
                 >
                   <option value="easy">Easy</option>
                   <option value="medium">Medium</option>
@@ -205,7 +205,7 @@ function AdminPanel() {
                 </label>
                 <select
                   {...register('tags')}
-                  className={`select select-bordered ${errors.tags && 'select-error'}`}
+                  className={`select ${errors.tags && 'select-error'}`}
                 >
                   <option value="array">Array</option>
                   <option value="linkedList">Linked List</option>
@@ -249,19 +249,19 @@ function AdminPanel() {
                 <input
                   {...register(`visibleTestCases.${index}.input`)}
                   placeholder="Input"
-                  className="input input-bordered w-full"
+                  className="input w-full"
                 />
 
                 <input
                   {...register(`visibleTestCases.${index}.output`)}
                   placeholder="Output"
-                  className="input input-bordered w-full"
+                  className="input w-full"
                 />
 
                 <textarea
                   {...register(`visibleTestCases.${index}.explanation`)}
                   placeholder="Explanation"
-                  className="textarea textarea-bordered w-full"
+                  className="textarea w-full"
                 />
               </div>
             ))}
@@ -295,13 +295,13 @@ function AdminPanel() {
                 <input
                   {...register(`hiddenTestCases.${index}.input`)}
                   placeholder="Input"
-                  className="input input-bordered w-full"
+                  className="input w-full"
                 />
 
                 <input
                   {...register(`hiddenTestCases.${index}.output`)}
                   placeholder="Output"
-                  className="input input-bordered w-full"
+                  className="input w-full"
                 />
               </div>
             ))}

@@ -16,6 +16,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Editor } from '@monaco-editor/react';
 import { getBattleSocket } from '../utils/socket';
 import axiosClient from '../utils/axiosClient';
+import { NavLink } from 'react-router';
+import { Swords, Timer, Activity, Trophy, ArrowLeft, Play, Send } from 'lucide-react';
+import Navbar from '../components/Navbar';
 import {
   startQueueing,
   stopQueueing,
@@ -33,6 +36,11 @@ import {
 
 const ROOM_STORAGE_KEY = 'algoverse_active_battle_room';
 const PROGRESS_EMIT_THROTTLE_MS = 600;
+const LOBBY_FEATURES = [
+  { icon: Timer, title: '15 minutes', text: 'Same problem, same clock for both players.' },
+  { icon: Activity, title: 'Live progress', text: 'See how many lines and tests your opponent has.' },
+  { icon: Trophy, title: 'Server judged', text: 'Hidden test cases decide the winner.' },
+];
 const DEFAULT_CODE = '// Problem padho aur yahan code likho\n';
 
 // Problem.startCode me language names 'C++' / 'Java' / 'JavaScript' store hote hain
@@ -294,27 +302,56 @@ export default function CodeBattle() {
   // -----------------------------------------------------------------------
   if (battle.status === 'idle' || battle.status === 'queueing') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh] gap-4">
-        <h1 className="text-2xl font-bold">⚔️ 1v1 Code Battle</h1>
-        {battle.status === 'idle' ? (
-          <button
-            onClick={handleFindMatch}
-            className="px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium"
-          >
-            Find Match
-          </button>
-        ) : (
-          <div className="flex flex-col items-center gap-3">
-            <div className="animate-pulse text-lg">Opponent dhoonda ja raha hai...</div>
-            <button
-              onClick={handleCancelQueue}
-              className="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white text-sm"
-            >
-              Cancel
-            </button>
+      <div className="min-h-screen bg-grid">
+        <Navbar />
+        <main className="mx-auto max-w-3xl px-4 sm:px-6 py-16 text-center fade-up">
+          <span className="inline-grid place-items-center w-20 h-20 rounded-3xl bg-gradient-to-br from-primary to-secondary shadow-xl shadow-primary/30">
+            <Swords size={40} className="text-white" />
+          </span>
+          <h1 className="mt-6 text-4xl sm:text-5xl font-extrabold tracking-tight">
+            1v1 <span className="text-gradient">Code Battle</span>
+          </h1>
+          <p className="mt-4 text-base-content/60 max-w-xl mx-auto">
+            Get matched with another coder, solve the same problem against the clock, and watch their progress live.
+            First to pass every hidden test case wins.
+          </p>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-3 text-left">
+            {LOBBY_FEATURES.map((feature) => {
+              const { icon: Icon, title, text } = feature;
+              return (
+              <div key={title} className="glass-panel rounded-2xl p-5">
+                <Icon size={20} className="text-accent" />
+                <p className="mt-3 font-semibold">{title}</p>
+                <p className="mt-1 text-sm text-base-content/60">{text}</p>
+              </div>
+            );
+            })}
           </div>
-        )}
-        {battle.error && <p className="text-red-500 text-sm">{battle.error}</p>}
+
+          <div className="mt-10">
+            {battle.status === 'idle' ? (
+              <button onClick={handleFindMatch} className="btn-gradient btn-lg px-10">
+                <Swords size={20} /> Find a match
+              </button>
+            ) : (
+              <div className="flex flex-col items-center gap-4">
+                <div className="flex items-center gap-3 text-lg font-medium">
+                  <span className="loading loading-ring loading-lg text-primary" />
+                  Looking for an opponent...
+                </div>
+                <button onClick={handleCancelQueue} className="btn btn-ghost btn-sm border border-base-content/15">
+                  Cancel
+                </button>
+              </div>
+            )}
+            {battle.error && (
+              <div role="alert" className="alert alert-error alert-soft mt-6 max-w-md mx-auto">
+                {battle.error}
+              </div>
+            )}
+          </div>
+        </main>
       </div>
     );
   }
@@ -322,27 +359,31 @@ export default function CodeBattle() {
   const isLowTime = battle.status === 'matched' && timeLeftMs < 60_000;
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen bg-base-200">
       {/* Top bar: timer + status */}
-      <div className="flex items-center justify-between px-6 py-3 bg-gray-900 text-white">
-        <h2 className="font-semibold truncate max-w-xs">{battle.problem?.title ?? 'Problem'}</h2>
-        <div className={`text-xl font-mono ${isLowTime ? 'text-red-500' : 'text-green-400'}`}>
+      <div className="h-14 shrink-0 flex items-center justify-between gap-4 px-4 border-b border-base-content/10 bg-base-100">
+        <div className="flex items-center gap-3 min-w-0">
+          <NavLink to="/" className="btn btn-ghost btn-sm btn-square" aria-label="Back to problems"><ArrowLeft size={18} /></NavLink>
+          <Swords size={18} className="text-primary shrink-0" />
+          <h2 className="font-semibold truncate max-w-xs">{battle.problem?.title ?? 'Problem'}</h2>
+        </div>
+        <div className={`px-3 py-1 rounded-lg bg-base-200 text-xl font-mono tabular-nums ${isLowTime ? 'text-error animate-pulse' : 'text-success'}`}>
           {battle.status === 'ended' ? '--:--' : formatTime(timeLeftMs)}
         </div>
-        <span className="text-xs px-2 py-1 rounded bg-gray-700">
+        <span className={`badge badge-soft capitalize ${battle.problem?.difficulty === 'easy' ? 'badge-success' : battle.problem?.difficulty === 'medium' ? 'badge-warning' : 'badge-error'}`}>
           {battle.problem?.difficulty ?? ''}
         </span>
       </div>
 
       {battle.status === 'ended' && (
-        <div className="p-4 bg-yellow-100 text-yellow-900 text-center font-medium">
+        <div className="p-3 bg-primary/10 border-b border-primary/20 text-center font-medium flex items-center justify-center gap-2 flex-wrap">
           {battle.winnerId
             ? battle.winnerId === currentUser?._id
               ? '🏆 Tum jeet gaye!'
               : '😔 Opponent jeet gaya.'
             : '🤝 Match draw raha.'}{' '}
           <span className="text-sm">({endReasonText(battle.endReason)})</span>
-          <button onClick={handlePlayAgain} className="ml-4 px-3 py-1 rounded bg-indigo-600 text-white text-sm">
+          <button onClick={handlePlayAgain} className="btn btn-primary btn-sm ml-2">
             Play Again
           </button>
         </div>
@@ -350,26 +391,26 @@ export default function CodeBattle() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Left: problem statement */}
-        <div className="w-1/4 overflow-y-auto p-4 border-r border-gray-300 bg-gray-50">
+        <div className="w-1/4 overflow-y-auto scroll-thin p-5 border-r border-base-content/10 bg-base-100">
           <h3 className="font-semibold mb-2">Problem Statement</h3>
-          <p className="text-sm whitespace-pre-wrap">
+          <p className="text-sm whitespace-pre-wrap leading-relaxed text-base-content/80">
             {battle.problem?.description ?? 'Description load ho rahi hai...'}
           </p>
         </div>
 
         {/* Middle: my editor */}
         <div className="w-1/2 flex flex-col">
-          <div className="flex items-center justify-between px-3 py-2 bg-gray-100 border-b">
+          <div className="flex items-center justify-between px-3 py-2 bg-base-100 border-b border-base-content/10">
             <select
               value={language}
               onChange={(e) => handleLanguageChange(e.target.value)}
-              className="text-sm border rounded px-2 py-1"
+              className="select select-sm w-auto"
             >
               <option value="cpp">C++</option>
               <option value="java">Java</option>
               <option value="javascript">JavaScript</option>
             </select>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-base-content/60 tabular-nums">
               {battle.myProgress.codeLines} lines · {battle.myProgress.passed}/{battle.myProgress.total} passed
             </span>
           </div>
@@ -383,27 +424,27 @@ export default function CodeBattle() {
               options={{ minimap: { enabled: false }, fontSize: 14 }}
             />
           </div>
-          <div className="flex gap-2 p-3 bg-gray-100 border-t">
+          <div className="flex justify-end gap-2 p-3 bg-base-100 border-t border-base-content/10">
             <button
               disabled={isRunning || battle.status === 'ended'}
               onClick={runTests}
-              className="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 text-white text-sm disabled:opacity-50"
+              className="btn btn-sm btn-ghost border border-base-content/15"
             >
-              {isRunning ? 'Running...' : 'Run Tests'}
+              <Play size={14} /> {isRunning ? 'Running...' : 'Run tests'}
             </button>
             <button
               disabled={isRunning || battle.status === 'ended'}
               onClick={submitFinal}
-              className="px-4 py-2 rounded bg-green-600 hover:bg-green-700 text-white text-sm disabled:opacity-50"
+              className="btn btn-sm btn-success"
             >
-              Submit
+              <Send size={14} /> Submit
             </button>
           </div>
         </div>
 
         {/* Right: opponent status + live terminal */}
-        <div className="w-1/4 flex flex-col border-l border-gray-300">
-          <div className="p-3 bg-gray-100 border-b">
+        <div className="w-1/4 flex flex-col border-l border-base-content/10 bg-base-100">
+          <div className="p-4 border-b border-base-content/10">
             <h3 className="font-semibold text-sm">
               Opponent{' '}
               <span
@@ -412,15 +453,15 @@ export default function CodeBattle() {
                 }`}
               />
             </h3>
-            <div className="text-xs text-gray-600 mt-1">
+            <div className="text-xs text-base-content/60 mt-1 tabular-nums">
               {battle.opponentProgress.codeLines} lines · {battle.opponentProgress.passed}/
               {battle.opponentProgress.total} passed
             </div>
           </div>
-          <div className="flex-1 overflow-y-auto p-3 font-mono text-xs bg-black text-green-400">
+          <div className="flex-1 overflow-y-auto scroll-thin p-3 font-mono text-xs bg-base-300/40 text-success space-y-1">
             {terminalLog.map((entry, idx) => (
               <div key={idx}>
-                <span className="text-gray-500">[{new Date(entry.at).toLocaleTimeString()}]</span>{' '}
+                <span className="text-base-content/40">[{new Date(entry.at).toLocaleTimeString()}]</span>{' '}
                 {entry.text}
               </div>
             ))}

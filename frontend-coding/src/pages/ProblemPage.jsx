@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
-import { useParams } from 'react-router';
+import { useParams, NavLink } from 'react-router';
+import { ArrowLeft, Play, Send, FileText, Video as VideoIcon, Code2, History, Bot } from 'lucide-react';
+import { Logo } from '../components/Navbar';
 import axiosClient from "../utils/axiosClient"
 import SubmissionHistory from "../components/SubmissionHistory"
 import ChatAi from '../components/ChatAi';
@@ -142,10 +144,10 @@ const ProblemPage = () => {
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'easy': return 'text-green-500';
-      case 'medium': return 'text-yellow-500';
-      case 'hard': return 'text-red-500';
-      default: return 'text-gray-500';
+      case 'easy': return 'badge-success';
+      case 'medium': return 'badge-warning';
+      case 'hard': return 'badge-error';
+      default: return 'badge-ghost';
     }
   };
 
@@ -158,58 +160,79 @@ const ProblemPage = () => {
   }
 
   return (
-    <div className="h-screen flex bg-base-100">
+    <div className="h-screen flex flex-col bg-base-200">
+      {/* Top bar */}
+      <header className="h-14 shrink-0 flex items-center justify-between gap-4 px-4 border-b border-base-content/10 bg-base-100">
+        <div className="flex items-center gap-3 min-w-0">
+          <NavLink to="/" className="btn btn-ghost btn-sm btn-square" aria-label="Back to problems">
+            <ArrowLeft size={18} />
+          </NavLink>
+          <NavLink to="/" className="hidden sm:block"><Logo /></NavLink>
+          <span className="hidden md:block text-base-content/30">/</span>
+          <span className="truncate font-medium">{problem?.title ?? 'Loading...'}</span>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <button className="btn btn-sm btn-ghost border border-base-content/15" onClick={handleRun} disabled={loading}>
+            {loading ? <span className="loading loading-spinner loading-xs" /> : <Play size={14} />} Run
+          </button>
+          <button className="btn btn-sm btn-success" onClick={handleSubmitCode} disabled={loading}>
+            {loading ? <span className="loading loading-spinner loading-xs" /> : <Send size={14} />} Submit
+          </button>
+        </div>
+      </header>
+
+    <div className="flex-1 min-h-0 flex flex-col lg:flex-row">
       {/* Left Panel */}
-      <div className="w-1/2 flex flex-col border-r border-base-300">
+      <div className="lg:w-1/2 min-h-0 h-1/2 lg:h-auto flex flex-col border-b lg:border-b-0 lg:border-r border-base-content/10 bg-base-100">
         {/* Left Tabs */}
-        <div className="tabs tabs-bordered bg-base-200 px-4">
+        <div className="tabs tabs-border bg-base-100 px-2 border-b border-base-content/10 shrink-0">
           <button
-            className={`tab ${activeLeftTab === 'description' ? 'tab-active' : ''}`}
+            className={`tab gap-1.5 text-sm ${activeLeftTab === 'description' ? 'tab-active' : ''}`}
             onClick={() => setActiveLeftTab('description')}
           >
-            Description
+            <FileText size={15} /> Description
           </button>
           <button
-            className={`tab ${activeLeftTab === 'editorial' ? 'tab-active' : ''}`}
+            className={`tab gap-1.5 text-sm ${activeLeftTab === 'editorial' ? 'tab-active' : ''}`}
             onClick={() => setActiveLeftTab('editorial')}
           >
-            Editorial
+            <VideoIcon size={15} /> Editorial
           </button>
           <button
-            className={`tab ${activeLeftTab === 'solutions' ? 'tab-active' : ''}`}
+            className={`tab gap-1.5 text-sm ${activeLeftTab === 'solutions' ? 'tab-active' : ''}`}
             onClick={() => setActiveLeftTab('solutions')}
           >
-            Solutions
+            <Code2 size={15} /> Solutions
           </button>
           <button
-            className={`tab ${activeLeftTab === 'submissions' ? 'tab-active' : ''}`}
+            className={`tab gap-1.5 text-sm ${activeLeftTab === 'submissions' ? 'tab-active' : ''}`}
             onClick={() => setActiveLeftTab('submissions')}
           >
-            Submissions
+            <History size={15} /> Submissions
           </button>
 
           <button
-            className={`tab ${activeLeftTab === 'chatAI' ? 'tab-active' : ''}`}
+            className={`tab gap-1.5 text-sm ${activeLeftTab === 'chatAI' ? 'tab-active' : ''}`}
             onClick={() => setActiveLeftTab('chatAI')}
           >
-            ChatAI
+            <Bot size={15} /> AI Tutor
           </button>
 
 
         </div>
 
         {/* Left Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto scroll-thin p-6">
           {problem && (
             <>
               {activeLeftTab === 'description' && (
                 <div>
                   <div className="flex items-center gap-4 mb-6">
                     <h1 className="text-2xl font-bold">{problem.title}</h1>
-                    <div className={`badge badge-outline ${getDifficultyColor(problem.difficulty)}`}>
+                    <div className={`badge badge-soft ${getDifficultyColor(problem.difficulty)}`}>
                       {problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
                     </div>
-                    <div className="badge badge-primary">{problem.tags}</div>
+                    <div className="badge badge-ghost">{problem.tags}</div>
                   </div>
 
                   <div className="prose max-w-none">
@@ -222,9 +245,9 @@ const ProblemPage = () => {
                     <h3 className="text-lg font-semibold mb-4">Examples:</h3>
                     <div className="space-y-4">
                       {problem.visibleTestCases.map((example, index) => (
-                        <div key={index} className="bg-base-200 p-4 rounded-lg">
+                        <div key={index} className="bg-base-200 border border-base-content/10 p-4 rounded-xl">
                           <h4 className="font-semibold mb-2">Example {index + 1}:</h4>
-                          <div className="space-y-2 text-sm font-mono">
+                          <div className="space-y-2 text-sm font-mono whitespace-pre-wrap break-words">
                             <div><strong>Input:</strong> {example.input}</div>
                             <div><strong>Output:</strong> {example.output}</div>
                             <div><strong>Explanation:</strong> {example.explanation}</div>
@@ -243,7 +266,7 @@ const ProblemPage = () => {
                     {problem.secureUrl ? (
                       <Editorial secureUrl={problem.secureUrl} thumbnailUrl={problem.thumbnailUrl} duration={problem.duration}/>
                     ) : (
-                      <p className="text-gray-500">No video editorial for this problem yet.</p>
+                      <p className="text-base-content/50">No video editorial for this problem yet.</p>
                     )}
                   </div>
                 </div>
@@ -264,7 +287,7 @@ const ProblemPage = () => {
                           </pre>
                         </div>
                       </div>
-                    )) : <p className="text-gray-500">No solutions available yet.</p>}
+                    )) : <p className="text-base-content/50">No solutions available yet.</p>}
                   </div>
                 </div>
               )}
@@ -272,7 +295,7 @@ const ProblemPage = () => {
               {activeLeftTab === 'submissions' && (
                 <div>
                   <h2 className="text-xl font-bold mb-4">My Submissions</h2>
-                  <div className="text-gray-500">
+                  <div>
                     <SubmissionHistory problemId={problemId} />
                   </div>
                 </div>
@@ -280,7 +303,7 @@ const ProblemPage = () => {
 
               {activeLeftTab === 'chatAI' && (
                 <div className="prose max-w-none">
-                  <h2 className="text-xl font-bold mb-4">CHAT with AI</h2>
+                  <h2 className="text-xl font-bold mb-4">AI Tutor</h2>
                   <div className="whitespace-pre-wrap text-sm leading-relaxed">
                     <ChatAi problem={problem}></ChatAi>
                   </div>
@@ -292,23 +315,23 @@ const ProblemPage = () => {
       </div>
 
       {/* Right Panel */}
-      <div className="w-1/2 flex flex-col">
+      <div className="lg:w-1/2 min-h-0 h-1/2 lg:h-auto flex flex-col bg-base-100">
         {/* Right Tabs */}
-        <div className="tabs tabs-bordered bg-base-200 px-4">
+        <div className="tabs tabs-border bg-base-100 px-2 border-b border-base-content/10 shrink-0">
           <button
-            className={`tab ${activeRightTab === 'code' ? 'tab-active' : ''}`}
+            className={`tab gap-1.5 text-sm ${activeRightTab === 'code' ? 'tab-active' : ''}`}
             onClick={() => setActiveRightTab('code')}
           >
             Code
           </button>
           <button
-            className={`tab ${activeRightTab === 'testcase' ? 'tab-active' : ''}`}
+            className={`tab gap-1.5 text-sm ${activeRightTab === 'testcase' ? 'tab-active' : ''}`}
             onClick={() => setActiveRightTab('testcase')}
           >
             Testcase
           </button>
           <button
-            className={`tab ${activeRightTab === 'result' ? 'tab-active' : ''}`}
+            className={`tab gap-1.5 text-sm ${activeRightTab === 'result' ? 'tab-active' : ''}`}
             onClick={() => setActiveRightTab('result')}
           >
             Result
@@ -366,33 +389,6 @@ const ProblemPage = () => {
                 />
               </div>
 
-              {/* Action Buttons */}
-              <div className="p-4 border-t border-base-300 flex justify-between">
-                <div className="flex gap-2">
-                  <button
-                    className="btn btn-ghost btn-sm"
-                    onClick={() => setActiveRightTab('testcase')}
-                  >
-                    Console
-                  </button>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    className={`btn btn-outline btn-sm ${loading ? 'loading' : ''}`}
-                    onClick={handleRun}
-                    disabled={loading}
-                  >
-                    Run
-                  </button>
-                  <button
-                    className={`btn btn-primary btn-sm ${loading ? 'loading' : ''}`}
-                    onClick={handleSubmitCode}
-                    disabled={loading}
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
             </div>
           )}
 
@@ -448,7 +444,7 @@ const ProblemPage = () => {
                   </div>
                 </div>
               ) : (
-                <div className="text-gray-500">
+                <div className="text-base-content/50">
                   Click "Run" to test your code with the example test cases.
                 </div>
               )}
@@ -486,7 +482,7 @@ const ProblemPage = () => {
                   </div>
                 </div>
               ) : (
-                <div className="text-gray-500">
+                <div className="text-base-content/50">
                   Click "Submit" to submit your solution for evaluation.
                 </div>
               )}
@@ -494,6 +490,7 @@ const ProblemPage = () => {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 };

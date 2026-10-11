@@ -49,12 +49,12 @@ function ChatAi({ problem }) {
   };
 
   return (
-    <div className="flex flex-col h-screen max-h-[80vh] min-h-[500px]">
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+    <div className="flex flex-col h-[70vh] min-h-[420px] rounded-2xl border border-base-content/10 bg-base-200/50 overflow-hidden">
+      <div className="flex-1 overflow-y-auto scroll-thin p-4 space-y-3">
 
         {/* Greeting — sirf UI mein, messages array mein nahi */}
         <div className="chat chat-start">
-          <div className="chat-bubble bg-base-200 text-base-content">
+          <div className="chat-bubble bg-base-300 text-base-content">
             👋 Hi! I'm your DSA tutor. Ask me anything about <strong>{problem?.title}</strong>.
           </div>
         </div>
@@ -64,7 +64,7 @@ function ChatAi({ problem }) {
             key={index}
             className={`chat ${msg.role === "user" ? "chat-end" : "chat-start"}`}
           >
-            <div className="chat-bubble bg-base-200 text-base-content whitespace-pre-wrap">
+            <div className={`chat-bubble whitespace-pre-wrap text-sm leading-relaxed ${msg.role === "user" ? "chat-bubble-primary" : "bg-base-300 text-base-content"}`}>
               {msg.parts[0].text}
             </div>
           </div>
@@ -73,7 +73,7 @@ function ChatAi({ problem }) {
         {/* Loading bubble */}
         {isLoading && (
           <div className="chat chat-start">
-            <div className="chat-bubble bg-base-200 text-base-content">
+            <div className="chat-bubble bg-base-300 text-base-content">
               <span className="loading loading-dots loading-sm"></span>
             </div>
           </div>
@@ -84,18 +84,18 @@ function ChatAi({ problem }) {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="sticky bottom-0 p-4 bg-base-100 border-t"
+        className="p-3 bg-base-100 border-t border-base-content/10"
       >
         <div className="flex items-center gap-2">
           <input
             placeholder="Ask me anything about this problem..."
-            className="input input-bordered flex-1"
+            className="input flex-1"
             disabled={isLoading}
             {...register("message", { required: true, minLength: 2 })}
           />
           <button
             type="submit"
-            className="btn btn-ghost"
+            className="btn btn-primary btn-square" aria-label="Send message"
             disabled={!!errors.message || isLoading}
           >
             <Send size={20} />

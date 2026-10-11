@@ -1,103 +1,68 @@
-import React from 'react';
-import { Plus, Edit, Trash2, Home, RefreshCw, Zap,Video } from 'lucide-react';
 import { NavLink } from 'react-router';
+import { Plus, Pencil, Trash2, Video, ArrowRight } from 'lucide-react';
+
+const adminOptions = [
+  {
+    title: 'Create Problem',
+    description: 'Add a new problem with test cases, starter code and reference solutions.',
+    icon: Plus,
+    tone: 'text-success bg-success/10',
+    route: '/admin/create',
+  },
+  {
+    title: 'Update Problem',
+    description: 'Edit an existing problem. Reference solutions are re-validated on save.',
+    icon: Pencil,
+    tone: 'text-warning bg-warning/10',
+    route: '/admin/update',
+  },
+  {
+    title: 'Delete Problem',
+    description: 'Remove a problem along with its submissions.',
+    icon: Trash2,
+    tone: 'text-error bg-error/10',
+    route: '/admin/delete',
+  },
+  {
+    title: 'Video Editorials',
+    description: 'Upload or remove solution walkthrough videos.',
+    icon: Video,
+    tone: 'text-info bg-info/10',
+    route: '/admin/video',
+  },
+];
 
 function Admin() {
-
-  const adminOptions = [
-    {
-      id: 'create',
-      title: 'Create Problem',
-      description: 'Add a new coding problem to the platform',
-      icon: Plus,
-      color: 'btn-success',
-      bgColor: 'bg-success/10',
-      route: '/admin/create'
-    },
-    {
-      id: 'update',
-      title: 'Update Problem',
-      description: 'Edit existing problems and their details',
-      icon: Edit,
-      color: 'btn-warning',
-      bgColor: 'bg-warning/10',
-      route: '/admin/update'
-    },
-    {
-      id: 'delete',
-      title: 'Delete Problem',
-      description: 'Remove problems from the platform',
-      icon: Trash2,
-      color: 'btn-error',
-      bgColor: 'bg-error/10',
-      route: '/admin/delete'
-    },
-    {
-      id: 'video',
-      title: 'Video Problem',
-      description: 'Upload And Delete Videos',
-      icon: Video,
-      color: 'btn-success',
-      bgColor: 'bg-success/10',
-      route: '/admin/video'
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-base-200">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-base-content mb-4">
-            Admin Panel
-          </h1>
-          <p className="text-base-content/70 text-lg">
-            Manage coding problems on your platform
-          </p>
-        </div>
+    <div className="fade-up">
+      <div className="mb-10">
+        <p className="text-sm font-medium text-accent">Admin</p>
+        <h1 className="mt-1 text-3xl font-extrabold tracking-tight">Manage AlgoVerse</h1>
+        <p className="mt-2 text-base-content/60">Create, edit and curate the problems on the platform.</p>
+      </div>
 
-        {/* Admin Options Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {adminOptions.map((option) => {
-            const IconComponent = option.icon;
-            return (
-              <div
-                key={option.id}
-                className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
-              >
-                <div className="card-body items-center text-center p-8">
-                  {/* Icon */}
-                  <div className={`${option.bgColor} p-4 rounded-full mb-4`}>
-                    <IconComponent size={32} className="text-base-content" />
-                  </div>
-
-                  {/* Title */}
-                  <h2 className="card-title text-xl mb-2">
-                    {option.title}
-                  </h2>
-
-                  {/* Description */}
-                  <p className="text-base-content/70 mb-6">
-                    {option.description}
-                  </p>
-
-                  {/* Action Button */}
-                  <div className="card-actions">
-                    <div className="card-actions">
-                    <NavLink
-                    to={option.route}
-                   className={`btn ${option.color} btn-wide`}
-                   >
-                   {option.title}
-                   </NavLink>
-                   </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
+      <div className="grid gap-5 sm:grid-cols-2">
+        {adminOptions.map((option) => {
+          const { title, description, icon: Icon, tone, route } = option;
+          return (
+          <NavLink
+            key={route}
+            to={route}
+            className="group glass-panel rounded-2xl p-6 flex items-start gap-5 hover:-translate-y-0.5 hover:border-primary/40 transition-all"
+          >
+            <span className={`p-3 rounded-xl ${tone}`}>
+              <Icon size={24} />
+            </span>
+            <span className="flex-1">
+              <span className="flex items-center gap-2 text-lg font-semibold">
+                {title}
+                <ArrowRight size={16} className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+              </span>
+              <span className="mt-1 block text-sm text-base-content/60">{description}</span>
+            </span>
+          </NavLink>
+        );
+            })}
       </div>
     </div>
   );

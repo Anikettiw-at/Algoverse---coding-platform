@@ -128,7 +128,7 @@ function AdminUpload(){
                         }
                       }
                     })}
-                    className={`file-input file-input-bordered w-full ${errors.videoFile ? 'file-input-error' : ''}`}
+                    className={`file-input w-full ${errors.videoFile ? 'file-input-error' : ''}`}
                     disabled={uploading}
                   />
                   {errors.videoFile && (
