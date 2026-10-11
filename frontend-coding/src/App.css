@@ -1,0 +1,1102 @@
+/* =========================
+   🌌 ULTRA CYBER AUTH UI
+========================= */
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ===== BACKGROUND ===== */
+.auth-bg {
+  min-height: 100vh;
+  background: linear-gradient(120deg, #020617, #020617, #0f172a);
+  background-size: 300% 300%;
+  animation: bgMove 12s ease infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+@keyframes bgMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== PARTICLES ===== */
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #22d3ee;
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: floatParticle linear infinite;
+}
+
+@keyframes floatParticle {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-120vh); }
+}
+
+/* ===== GLASS CARD ===== */
+.auth-card {
+  width: 430px;
+  padding: 36px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(34, 211, 238, 0.4);
+  box-shadow:
+    0 0 40px rgba(34, 211, 238, 0.3),
+    inset 0 0 20px rgba(255, 255, 255, 0.05);
+  position: relative;
+  animation: cardPop 0.8s ease;
+}
+
+@keyframes cardPop {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ===== SCAN LINE ===== */
+.auth-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(34, 211, 238, 0.4),
+    transparent
+  );
+  animation: scan 4s linear infinite;
+}
+
+@keyframes scan {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+/* ===== TITLE ===== */
+.auth-title {
+  text-align: center;
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  color: #22d3ee;
+  text-shadow:
+    0 0 15px #22d3ee,
+    0 0 40px rgba(34, 211, 238, 0.9);
+  margin-bottom: 32px;
+}
+
+/* ===== INPUT ===== */
+.auth-input {
+  background: rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.auth-input:focus {
+  border-color: #22d3ee !important;
+  box-shadow:
+    0 0 12px #22d3ee,
+    0 0 25px rgba(34, 211, 238, 0.6);
+}
+
+/* ===== BUTTON ===== */
+.auth-btn {
+  width: 100%;
+  font-weight: 900;
+  background: linear-gradient(135deg, #22d3ee, #38bdf8);
+  color: black;
+  border-radius: 999px;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 35px #22d3ee;
+}
+
+.auth-btn:active {
+  transform: scale(0.95);
+}
+
+/* ===== RIPPLE ===== */
+.auth-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.6), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.auth-btn:active::after {
+  opacity: 1;
+}
+
+/* =========================
+   🧠 HOME / PROBLEMS UI
+========================= */
+
+.home-bg {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #020617, #020617, #0f172a);
+  color: white;
+}
+
+/* Navbar */
+.cyber-nav {
+  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(34, 211, 238, 0.3);
+}
+
+/* Brand */
+.brand-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: #22d3ee;
+  text-shadow: 0 0 15px #22d3ee;
+}
+
+/* Filters */
+.filter-box {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 16px;
+  /* backdrop-filter: blur(10px); */
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Problem Card */
+.problem-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: all 0.3s ease;
+}
+
+.problem-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 0 25px rgba(34, 211, 238, 0.3);
+}
+
+/* Solved badge glow */
+.solved-glow {
+  box-shadow: 0 0 12px #22c55e;
+}
+
+
+/* ===============================
+   💀🔥 ULTIMATE DIFFICULTY BADGES
+   (CSS ONLY – NO CODE CHANGE)
+================================ */
+
+/* COMMON */
+.badge-success,
+.badge-warning,
+.badge-error {
+  position: relative;
+  padding: 6px 14px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  transition: all 0.25s ease;
+}
+
+/* ================= EASY ================= */
+.badge-success {
+  color: #22c55e !important;
+  background: linear-gradient(
+    135deg,
+    rgba(34,197,94,0.25),
+    rgba(34,197,94,0.05)
+  ) !important;
+  border: 1px solid rgba(34,197,94,0.8) !important;
+  box-shadow:
+    0 0 10px rgba(34,197,94,0.8),
+    inset 0 0 10px rgba(34,197,94,0.3);
+}
+
+/* ================= MEDIUM ================= */
+.badge-warning {
+  color: #facc15 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(250,204,21,0.25),
+    rgba(250,204,21,0.05)
+  ) !important;
+  border: 1px solid rgba(250,204,21,0.8) !important;
+  box-shadow:
+    0 0 10px rgba(250,204,21,0.8),
+    inset 0 0 10px rgba(250,204,21,0.3);
+}
+
+/* ================= HARD ================= */
+.badge-error {
+  color: #ef4444 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(239,68,68,0.35),
+    rgba(239,68,68,0.05)
+  ) !important;
+  border: 1px solid rgba(239,68,68,0.9) !important;
+  box-shadow:
+    0 0 14px rgba(239,68,68,1),
+    inset 0 0 12px rgba(239,68,68,0.4);
+  animation: dangerPulse 1.8s infinite;
+}
+
+/* HARD PULSE ANIMATION */
+@keyframes dangerPulse {
+  0%   { box-shadow: 0 0 10px rgba(239,68,68,0.8); }
+  50%  { box-shadow: 0 0 20px rgba(239,68,68,1); }
+  100% { box-shadow: 0 0 10px rgba(239,68,68,0.8); }
+}
+
+/* HOVER EFFECT (ALL) */
+.badge-success:hover,
+.badge-warning:hover,
+.badge-error:hover {
+  transform: scale(1.18);
+}
+
+
+/* ===============================
+   ADMIN PANEL UI ENHANCEMENT
+   (NO LOGIC / NO CLICK BREAK)
+=============================== */
+
+/* Page background glow */
+.min-h-screen.bg-base-200 {
+  background:
+    radial-gradient(circle at top, #0f172a, #020617 70%);
+}
+
+/* Admin cards */
+.card.bg-base-100 {
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.06),
+    rgba(255,255,255,0.02)
+  );
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  transition: all 0.35s ease;
+}
+
+/* Card hover – SAFE transform only */
+.card.bg-base-100:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+}
+
+/* Icon glow */
+.card .rounded-full {
+  box-shadow: 0 0 25px rgba(34,211,238,0.35);
+}
+
+/* Title glow */
+.card-title {
+  color: #e5e7eb;
+  letter-spacing: 0.04em;
+}
+
+/* Description */
+.card p {
+  color: #94a3b8;
+}
+
+/* Button polish (NO overlay) */
+.card .btn {
+  border-radius: 14px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+/* Button hover – SAFE */
+.card .btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* Grid spacing smooth */
+.grid {
+  row-gap: 2.5rem;
+}
+
+
+/* ===============================
+   CHAT AI UI (SAFE CSS ONLY)
+=============================== */
+
+/* Chat container background */
+.flex.flex-col.h-screen {
+  background: linear-gradient(180deg, #020617, #0f172a);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Message area */
+.flex-1.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+
+/* Scrollbar (Chrome) */
+.flex-1.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+.flex-1.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}
+
+/* Chat bubbles (common) */
+.chat-bubble {
+  max-width: 75%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* User message */
+.chat-end .chat-bubble {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  box-shadow: 0 8px 20px rgba(37,99,235,0.35);
+}
+
+/* AI message */
+.chat-start .chat-bubble {
+  background: rgba(255,255,255,0.08);
+  color: #e5e7eb;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Input bar */
+form.sticky {
+  background: rgba(2,6,23,0.95);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Input field */
+form .input {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #e5e7eb;
+}
+
+/* Input focus */
+form .input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.3);
+}
+
+/* Send button */
+form .btn {
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+/* Send hover */
+form .btn:hover {
+  transform: scale(1.1);
+}
+
+/* Disabled button */
+form .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* ===============================
+   SUBMISSION HISTORY UI (SAFE)
+=============================== */
+
+/* Section container */
+.container {
+  background: linear-gradient(180deg, #020617, #0f172a);
+  border-radius: 18px;
+}
+
+/* Heading */
+.container h2 {
+  color: #e5e7eb;
+  letter-spacing: 0.04em;
+}
+
+/* Table wrapper */
+.overflow-x-auto {
+  background: rgba(255,255,255,0.04);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Table */
+.table {
+  background: transparent;
+}
+
+/* Table head */
+.table thead th {
+  background: rgba(255,255,255,0.06);
+  color: #cbd5f5;
+  font-weight: 600;
+}
+
+/* Table rows */
+.table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+/* Mono fields */
+.font-mono {
+  color: #e5e7eb;
+}
+
+/* Status badges */
+.badge-success {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: white;
+}
+
+.badge-error {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  color: white;
+}
+
+.badge-warning {
+  background: linear-gradient(135deg, #facc15, #fde047);
+  color: black;
+}
+
+.badge-info {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: white;
+}
+
+/* Code button */
+.table .btn {
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Hover safe */
+.table .btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Info text */
+.container p {
+  color: #94a3b8;
+}
+
+/* Modal backdrop */
+.modal-open {
+  backdrop-filter: blur(6px);
+}
+
+/* Modal box */
+.modal-box {
+  background: #020617;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Modal title */
+.modal-box h3 {
+  color: #e5e7eb;
+}
+
+/* Code block */
+.modal-box pre {
+  background: #020617;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+}
+
+/* Alerts */
+.alert {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Spinner center */
+.loading {
+  color: #38bdf8;
+}
+
+
+/* ===============================
+   EDITORIAL VIDEO PLAYER UI
+   (SAFE – NO CLICK BREAK)
+=============================== */
+
+/* Video wrapper */
+.relative.w-full.max-w-2xl {
+  background: linear-gradient(180deg, #020617, #0f172a);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+}
+
+/* Video element */
+video {
+  border-radius: 18px;
+}
+
+/* Overlay controls */
+.absolute.bottom-0 {
+  backdrop-filter: blur(6px);
+}
+
+/* Play / Pause button */
+.btn-circle.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border: none;
+  box-shadow: 0 8px 25px rgba(37,99,235,0.6);
+}
+
+/* Hover effect (SAFE) */
+.btn-circle.btn-primary:hover {
+  transform: scale(1.08);
+}
+
+/* Time text */
+.text-white.text-sm {
+  color: #e5e7eb;
+  font-weight: 500;
+}
+
+/* Progress bar container */
+.range {
+  accent-color: #3b82f6;
+}
+
+/* Range background */
+.range::-webkit-slider-runnable-track {
+  background: rgba(255,255,255,0.2);
+  height: 4px;
+  border-radius: 10px;
+}
+
+.range::-webkit-slider-thumb {
+  background: #3b82f6;
+  border-radius: 50%;
+  height: 14px;
+  width: 14px;
+  margin-top: -5px;
+  cursor: pointer;
+}
+
+/* Firefox */
+.range::-moz-range-track {
+  background: rgba(255,255,255,0.2);
+  height: 4px;
+  border-radius: 10px;
+}
+
+.range::-moz-range-thumb {
+  background: #3b82f6;
+  border-radius: 50%;
+  height: 14px;
+  width: 14px;
+  cursor: pointer;
+}
+
+/* Hover glow on player */
+.relative.w-full.max-w-2xl:hover {
+  box-shadow: 0 35px 90px rgba(59,130,246,0.35);
+}
+
+/* ===============================
+   ADMIN VIDEO PANEL (SAFE CSS)
+=============================== */
+
+/* Page container */
+.container.mx-auto {
+  background: linear-gradient(180deg, #020617, #0f172a);
+  border-radius: 18px;
+}
+
+/* Page heading */
+.container h1 {
+  color: #e5e7eb;
+  letter-spacing: 0.04em;
+}
+
+/* Table wrapper */
+.overflow-x-auto {
+  background: rgba(255,255,255,0.04);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Table */
+.table {
+  background: transparent;
+}
+
+/* Table header */
+.table thead th {
+  background: rgba(255,255,255,0.06);
+  color: #cbd5f5;
+  font-weight: 600;
+}
+
+/* Table rows */
+.table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+/* Title column */
+.table td {
+  color: #e5e7eb;
+}
+
+/* Difficulty badges */
+.badge-success {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: white;
+}
+
+.badge-warning {
+  background: linear-gradient(135deg, #facc15, #fde047);
+  color: black;
+}
+
+.badge-error {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  color: white;
+}
+
+/* Tag badge */
+.badge-outline {
+  border-color: rgba(255,255,255,0.3);
+  color: #cbd5f5;
+}
+
+/* Upload button */
+a.btn.bg-blue-600 {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Upload hover */
+a.btn.bg-blue-600:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(37,99,235,0.45);
+}
+
+/* Delete button */
+.btn-error {
+  border-radius: 10px;
+}
+
+/* Delete hover */
+.btn-error:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(239,68,68,0.45);
+}
+
+/* Loading spinner */
+.loading {
+  color: #38bdf8;
+}
+
+/* Alerts */
+.alert {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ===============================
+   ADMIN VIDEO UPLOAD (SAFE CSS)
+=============================== */
+
+/* Page wrapper */
+.max-w-md.mx-auto {
+  background: linear-gradient(180deg, #020617, #0f172a);
+  border-radius: 18px;
+}
+
+/* Card */
+.card.bg-base-100 {
+  background: rgba(255,255,255,0.05);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+}
+
+/* Title */
+.card-title {
+  color: #e5e7eb;
+  letter-spacing: 0.04em;
+}
+
+/* File input */
+.file-input {
+  background: rgba(255,255,255,0.06);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #e5e7eb;
+}
+
+/* File input hover */
+.file-input:hover {
+  border-color: #3b82f6;
+}
+
+/* Selected file alert */
+.alert-info {
+  background: rgba(59,130,246,0.15);
+  border: 1px solid rgba(59,130,246,0.4);
+  color: #e5e7eb;
+}
+
+/* Upload progress text */
+.progress {
+  height: 10px;
+  border-radius: 10px;
+}
+
+/* Progress bar */
+.progress-primary::-webkit-progress-value {
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+}
+
+.progress-primary::-moz-progress-bar {
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+}
+
+/* Error alert */
+.alert-error {
+  background: rgba(239,68,68,0.15);
+  border: 1px solid rgba(239,68,68,0.4);
+}
+
+/* Success alert */
+.alert-success {
+  background: rgba(34,197,94,0.15);
+  border: 1px solid rgba(34,197,94,0.4);
+  color: #e5e7eb;
+}
+
+/* Upload button */
+.card-actions .btn-primary {
+  border-radius: 14px;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+/* Button hover */
+.card-actions .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(37,99,235,0.5);
+}
+
+/* Disabled state */
+.card-actions .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* ===============================
+   ADMIN CREATE PROBLEM – PRO UI
+   SAFE CSS ONLY
+=============================== */
+
+/* Page background */
+body {
+  background: radial-gradient(circle at top, #0f172a, #020617);
+}
+
+/* Main container */
+.container {
+  max-width: 1200px;
+}
+
+/* Card glass effect */
+.card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(14px);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 60px rgba(0,0,0,.5);
+}
+
+/* Section headings */
+.card h2 {
+  font-size: 1.4rem;
+  color: #e5e7eb;
+  border-left: 4px solid #6366f1;
+  padding-left: 12px;
+}
+
+/* Inputs & textarea */
+.input,
+.textarea,
+.select {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #e5e7eb;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.4);
+}
+
+/* Textarea resize control */
+textarea {
+  resize: vertical;
+}
+
+/* Error highlight */
+.input-error,
+.textarea-error,
+.select-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 2px rgba(239,68,68,0.35);
+}
+
+/* Visible / Hidden test case boxes */
+.border {
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  background: rgba(255,255,255,0.03);
+  border-radius: 14px;
+  transition: all .25s ease;
+}
+
+.border:hover {
+  border-color: #6366f1 !important;
+}
+
+/* Add / Remove buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  border: none;
+  box-shadow: 0 0 25px rgba(99,102,241,.4);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 40px rgba(99,102,241,.7);
+  transform: translateY(-1px);
+}
+
+.btn-error {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border: none;
+}
+
+/* Small buttons animation */
+.btn-sm,
+.btn-xs {
+  transition: transform .15s ease;
+}
+
+.btn-sm:hover,
+.btn-xs:hover {
+  transform: scale(1.05);
+}
+
+/* Code blocks */
+pre {
+  background: linear-gradient(135deg, #020617, #020617);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+}
+
+pre textarea {
+  color: #22d3ee;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+/* Language headers */
+h3 {
+  color: #a5b4fc;
+}
+
+/* Final submit button */
+button[type="submit"] {
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  padding: 14px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  box-shadow: 0 0 40px rgba(34,197,94,.5);
+}
+
+button[type="submit"]:hover {
+  box-shadow: 0 0 70px rgba(34,197,94,.8);
+}
+
+/* Smooth animations */
+* {
+  transition: background .2s ease, color .2s ease, border .2s ease;
+}
+
+
+/* ==============================
+   ADMIN DELETE – PRO TABLE UI
+============================== */
+
+/* Page background */
+.container {
+  max-width: 1200px;
+}
+
+/* Title styling */
+h1 {
+    
+  color: #e5e7eb;
+  letter-spacing: 0.5px;
+}
+
+/* Table wrapper */
+.overflow-x-auto {
+  border-radius: 18px;
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 50px rgba(0,0,0,.45);
+}
+
+/* Table */
+.table {
+  color: #e5e7eb;
+}
+
+/* Table header */
+.table thead th {
+  background: linear-gradient(135deg, #020617, #020617);
+  color: #a5b4fc;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Zebra rows enhancement */
+.table-zebra tbody tr:nth-child(even) {
+  background: rgba(255,255,255,0.02);
+}
+
+.table-zebra tbody tr:hover {
+  background: rgba(115, 117, 193, 0.12);
+  /* transform: scale(1.01); */
+  transition: all .2s ease;
+}
+
+/* Index column */
+.table th {
+  font-weight: 600;
+  color: #93c5fd;
+}
+
+/* Difficulty badges */
+.badge-success {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  box-shadow: 0 0 15px rgba(34,197,94,.6);
+}
+
+.badge-warning {
+  background: linear-gradient(135deg, #facc15, #eab308);
+  box-shadow: 0 0 15px rgba(250,204,21,.6);
+  color: #000;
+}
+
+.badge-error {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  box-shadow: 0 0 15px rgba(239,68,68,.6);
+}
+
+/* Tag badge */
+.badge-outline {
+  border: 1px solid #6366f1;
+  color: #a5b4fc;
+  background: rgba(99,102,241,0.1);
+}
+
+/* Delete button – DANGEROUS LOOK 😈 */
+.btn-error {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  border: none;
+  box-shadow: 0 0 20px rgba(239,68,68,.5);
+  transition: all .2s ease;
+}
+
+.btn-error:hover {
+  box-shadow: 0 0 40px rgba(239,68,68,.9);
+  transform: scale(1.08) rotate(-1deg);
+}
+
+/* Button spacing fix */
+.flex.space-x-2 {
+  align-items: center;
+}
+
+/* Loading spinner center glow */
+.loading-spinner {
+  filter: drop-shadow(0 0 20px #6366f1);
+}
+
+/* Error alert polish */
+.alert-error {
+  background: rgba(239,68,68,0.15);
+  border: 1px solid rgba(239,68,68,0.4);
+  backdrop-filter: blur(8px);
+}
+
+/* Smooth animations globally */
+.table tr,
+.btn,
+.badge {
+  transition: all .2s ease;
+}
+select option {
+  background-color: #0f172a; /* slate-900 */
+  color: #e5e7eb;           /* gray-200 */
+}
